@@ -26,6 +26,10 @@ router.post('/upload', auth, upload.single('file'), async (req, res) => {
 
     res.json(savedDoc)
   } catch (err) {
+      console.error('UPLOAD ERROR:', err.message)
+      if (err.response) {
+        console.error('FastAPI response status:', err.response.status)
+        console.error('FastAPI response data:', err.response.data)}
     res.status(500).json({ msg: 'Upload failed', error: err.message })
   }
 })
