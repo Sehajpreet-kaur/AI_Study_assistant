@@ -3,8 +3,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 import uuid, os
+from embeddings import EMBED
 
-EMBED = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 DB_PATH = "./chroma_db"
 
 def ingest_pdf(path: str, user_id: str) -> str:

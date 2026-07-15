@@ -4,8 +4,8 @@ from groq import Groq
 import os
 from dotenv import load_dotenv
 load_dotenv()
+from embeddings import EMBED
 
-EMBED  = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def answer_question(question: str, doc_id: str, user_id: str) -> dict:
