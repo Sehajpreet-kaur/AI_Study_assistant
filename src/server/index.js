@@ -8,7 +8,7 @@ import documentRoute from './routes/documents.js'
 
 const app = express()
 app.use(cors({
-    origin : process.env.RAG_URL}
+    origin : "https://ai-study-assistant-2-pqxq.onrender.com"}
 ))
 app.use(express.json())
 
