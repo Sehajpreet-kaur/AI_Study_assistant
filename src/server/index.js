@@ -7,7 +7,9 @@ import ragRoute from './routes/rag.js'
 import documentRoute from './routes/documents.js'
 
 const app = express()
-app.use(cors())
+app.use(cors({
+    origin : process.env.RAG_URL}
+))
 app.use(express.json())
 
 app.use('/api/auth',      authRoute)
