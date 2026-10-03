@@ -8,6 +8,8 @@ import Message from '../models/Message.js'
 const upload  = multer({ storage: multer.memoryStorage() })
 const RAG_URL = process.env.RAG_URL || 'http://localhost:8000'
 
+console.log('RAG_URL:', RAG_URL)
+
 const router= Router()
 router.post('/upload', auth, upload.single('file'), async (req, res) => {
   try {

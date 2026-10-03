@@ -8,8 +8,9 @@ import documentRoute from './routes/documents.js'
 
 const app = express()
 app.use(cors({
-    origin : "https://ai-study-assistant-2-pqxq.onrender.com" || "http://localhost:5173"}
-))
+    origin : ["https://ai-study-assistant-2-pqxq.onrender.com" ,
+      "http://localhost:5173"]
+}))
 app.use(express.json())
 
 app.use('/api/auth',      authRoute)
