@@ -15,7 +15,7 @@ db = Chroma(
 )
 
 def answer_question(question: str, doc_id: str, user_id: str) -> dict:
-    print("1: searching")
+    print("1: searching | total chunks in DB:", db._collection.count())
     results = db.similarity_search(
         question, k=4,
         filter={"$and": [{"doc_id": doc_id}, {"user_id": user_id}]}
