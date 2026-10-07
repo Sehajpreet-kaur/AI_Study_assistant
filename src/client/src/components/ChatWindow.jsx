@@ -64,7 +64,7 @@ export default function ChatWindow({ docId, filename }) {
     } finally {
       setLoading(false)
     }
-  
+  }
 
   return (
     <div style={styles.container}>
@@ -125,5 +125,4 @@ const styles = {
   inputRow:  { display: 'flex', gap: '10px', padding: '12px 0 0' },
   input:     { flex: 1, padding: '12px 16px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '15px', outline: 'none' },
   btn:       { padding: '12px 22px', borderRadius: '10px', background: '#6C63FF', color: '#fff', border: 'none', fontSize: '15px', cursor: 'pointer', fontWeight: 500 },
-}
 }
