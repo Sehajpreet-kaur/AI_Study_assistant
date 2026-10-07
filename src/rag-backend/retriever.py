@@ -1,24 +1,19 @@
-from langchain_community.vectorstores import Chroma
 from groq import Groq
 import os
 from dotenv import load_dotenv
 load_dotenv()
 from embeddings import EMBED
+from vectorstore import db, doc_filter
+
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# Created once at import time, reused across every request
-db = Chroma(
-    persist_directory="./chroma_db",
-    embedding_function=EMBED,
-    collection_name="study_docs"
-)
 
 def answer_question(question: str, doc_id: str, user_id: str) -> dict:
     print("1: searching | total chunks in DB:", db._collection.count())
     results = db.similarity_search(
         question, k=4,
-        filter={"$and": [{"doc_id": doc_id}, {"user_id": user_id}]}
+        filter=doc_filter(doc_id, user_id)
     )
 
     if not results:

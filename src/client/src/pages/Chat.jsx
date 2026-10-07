@@ -8,7 +8,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (!state?.docId) {
-      navigate('/dashboard')
+      navigate('/dashboard', { replace: true })
     }
   }, [state, navigate])
 
@@ -19,7 +19,7 @@ export default function Chat() {
   return (
     <div style={styles.page}>
       <div style={styles.topBar}>
-        <button style={styles.back} onClick={() => navigate('/dashboard')}>← Dashboard</button>
+        <button style={styles.back} onClick={() => navigate('/dashboard , { state: { notice: msg } }')}>← Dashboard</button>
         <span style={styles.filename}>{state.filename}</span>
       </div>
       <ChatWindow docId={state.docId} filename={state.filename} />

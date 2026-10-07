@@ -9,7 +9,8 @@ langchain-community
 langchain-huggingface
 langchain-chroma
 langchain-text-splitters
-chromadb
+qdrant-client
+langchain-qdrant
 sentence-transformers
 PyPDF
 PyMuPDF

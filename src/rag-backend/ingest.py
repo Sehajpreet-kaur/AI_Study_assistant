@@ -1,7 +1,7 @@
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import uuid
-from retriever import db  # reuse the shared Chroma client instead of creating a new one
+from vectorstore import db
 
 # def ingest_pdf(path: str, user_id: str) -> str:
 #     doc_id = str(uuid.uuid4())

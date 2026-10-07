@@ -4,6 +4,9 @@ from ingest import ingest_pdf
 from retriever import answer_question
 import shutil, os
 from starlette.concurrency import run_in_threadpool
+from vectorstore import client, COLLECTION, doc_filter
+from fastapi import Header
+from qdrant_client import models
 
 app = FastAPI()
 app.add_middleware(CORSMiddleware,
@@ -23,6 +26,17 @@ async def upload(
 
 @app.post("/ask")
 async def ask(body: dict):
-    return await run_in_threadpool(
-        answer_question, body["question"], body["doc_id"], body["user_id"]
+    flt = doc_filter(body["doc_id"], body["user_id"])
+    count = client.count(COLLECTION, count_filter=flt, exact=True).count
+    if count == 0:
+        raise HTTPException(status_code=409, detail="Document index missing. Please re-upload.")
+    return await run_in_threadpool(answer_question, body["question"], body["doc_id"], body["user_id"])
+
+
+@app.delete("/documents/{doc_id}")
+async def delete_document(doc_id: str, x_user_id: str = Header(...)):
+    client.delete(
+        COLLECTION,
+        points_selector=models.FilterSelector(filter=doc_filter(doc_id, x_user_id)),
     )
+    return {"ok": True}

@@ -52,14 +52,19 @@ export default function ChatWindow({ docId, filename }) {
       const { data } = await api.post('/rag/ask', { question, doc_id: docId })
       setMessages(prev => [...prev, { role: 'assistant', content: data.answer }])
       setSources(data.sources || [])
-    } catch {
+    }  catch (err) {
+      if (err.response?.status === 409) {
+        onMissing?.(err.response.data?.msg)   // doc was removed server-side
+        return
+      }
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: 'Something went wrong. Please try again.'
+        content: err.response?.data?.msg || 'Something went wrong. Please try again.'
       }])
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
-  }
+  
 
   return (
     <div style={styles.container}>
