@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import api from '../api/axios'
+import toast from 'react-hot-toast'
 
 export default function UploadBox({ onUploaded }) {
   const [loading, setLoading]   = useState(false)
@@ -7,20 +8,30 @@ export default function UploadBox({ onUploaded }) {
   const [error, setError]       = useState('')
   const inputRef = useRef()
 
+  const MAX_MB = 50
+
   const processFile = async (file) => {
-    if (!file || file.type !== 'application/pdf') {
-      setError('Please upload a PDF file')
+    if (!file) return
+
+    const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')
+    if (!isPdf) {
+      toast.error('Unsupported file format. Please upload a PDF.')
       return
     }
-    setError('')
+    if (file.size > MAX_MB * 1024 * 1024) {
+      toast.error(`File is too large. Maximum size is ${MAX_MB} MB.`)
+      return
+    }
     setLoading(true)
+    const toastId = toast.loading('Uploading your document...')
     try {
       const form = new FormData()
       form.append('file', file)
       const { data } = await api.post('/rag/upload', form)
+      toast.success('Document uploaded successfully!', { id: toastId })
       onUploaded(data)
     } catch (err) {
-      setError(err.response?.data?.msg || 'Upload failed. Try again.')
+      toast.error(err.response?.data?.msg || 'Upload failed. Try again.', { id: toastId })
     }
     setLoading(false)
   }
@@ -44,7 +55,7 @@ export default function UploadBox({ onUploaded }) {
         type="file"
         accept=".pdf"
         style={{ display: 'none' }}
-        onChange={e => processFile(e.target.files[0])}
+        onChange={e => {processFile(e.target.files[0]); e.target.value = ''}}
       />
 
       {loading ? (
