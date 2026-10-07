@@ -1,19 +1,16 @@
-from groq import Groq
 import os
+from groq import Groq
 from dotenv import load_dotenv
 load_dotenv()
-from embeddings import EMBED
 from vectorstore import db, doc_filter
 
-
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
-
+MODEL = os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")
 
 def answer_question(question: str, doc_id: str, user_id: str) -> dict:
-    print("1: searching | total chunks in DB:", db._collection.count())
+    print("1: searching")
     results = db.similarity_search(
-        question, k=4,
-        filter=doc_filter(doc_id, user_id)
+        question, k=4, filter=doc_filter(doc_id, user_id)
     )
 
     if not results:
@@ -34,7 +31,7 @@ Answer:"""
 
     print("2: calling groq")
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model=MODEL,
         messages=[{"role": "user", "content": prompt}],
         stream=False
     )
