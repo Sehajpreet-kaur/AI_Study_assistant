@@ -4,6 +4,7 @@ import Login from './client/src/pages/Login'
 import Register from './client/src/pages/Register'
 import Dashboard from './client/src/pages/Dashboard'
 import Chat from './client/src/pages/Chat'
+import { Toaster } from 'react-hot-toast'
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth()
@@ -13,6 +14,8 @@ function PrivateRoute({ children }) {
 
 export default function App() {
   return (
+    <>
+    <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
     <BrowserRouter>
       <AuthProvider>
         <Routes>
@@ -24,5 +27,6 @@ export default function App() {
         </Routes>
       </AuthProvider>
     </BrowserRouter>
+    </>
   )
 }
