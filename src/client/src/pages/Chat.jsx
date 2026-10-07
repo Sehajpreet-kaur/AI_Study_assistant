@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ChatWindow from '../components/ChatWindow'
+import {Link } from 'react-router-dom'
 
 export default function Chat() {
   const { state } = useLocation()
@@ -19,10 +20,10 @@ export default function Chat() {
   return (
     <div style={styles.page}>
       <div style={styles.topBar}>
-        <button style={styles.back} onClick={() => navigate('/dashboard , { state: { notice: msg } }')}>← Dashboard</button>
+        <Link to="/dashboard" style={styles.back}>← Dashboard</Link>
         <span style={styles.filename}>{state.filename}</span>
       </div>
-      <ChatWindow docId={state.docId} filename={state.filename} />
+      <ChatWindow docId={state.docId} filename={state.filename} onMissing={(msg) => navigate('/dashboard', { state: { notice: msg } })} />
     </div>
   )
 }

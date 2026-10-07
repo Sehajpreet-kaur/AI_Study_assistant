@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import api from '../api/axios'
 import SourcePanel from './SourcePanel'
 
-export default function ChatWindow({ docId, filename }) {
+export default function ChatWindow({ docId, filename, onMissing }) {
   const [messages, setMessages] = useState([])
   const [input, setInput]       = useState('')
   const [sources, setSources]   = useState([])
