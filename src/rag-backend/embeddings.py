@@ -1,11 +1,16 @@
 import os
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from typing import List
+from fastembed import TextEmbedding
+from langchain_core.embeddings import Embeddings
 
-hf_token = os.getenv("HF_TOKEN")
-if not hf_token:
-    raise RuntimeError("HF_TOKEN environment variable is not set")
+class FastEmbedEmbeddings(Embeddings):
+    def __init__(self, model_name="sentence-transformers/all-MiniLM-L6-v2", cache_dir=None):
+        self.model = TextEmbedding(model_name=model_name, cache_dir=cache_dir)
 
-EMBED = HuggingFaceEndpointEmbeddings(
-    model="sentence-transformers/all-MiniLM-L6-v2",
-    huggingfacehub_api_token=hf_token,
-)
+    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+        return [v.tolist() for v in self.model.embed(texts)]
+
+    def embed_query(self, text: str) -> List[float]:
+        return next(iter(self.model.embed([text]))).tolist()
+
+EMBED = FastEmbedEmbeddings(cache_dir=os.getenv("FASTEMBED_CACHE", "./models"))
