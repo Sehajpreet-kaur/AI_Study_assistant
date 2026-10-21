@@ -8,7 +8,7 @@ export default function UploadBox({ onUploaded }) {
   const [error, setError]       = useState('')
   const inputRef = useRef()
 
-  const MAX_MB = 50
+  const MAX_MB = 20
 
   const processFile = async (file) => {
     if (!file) return
